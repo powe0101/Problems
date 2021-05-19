@@ -24,3 +24,4 @@ vector<string> solution(vector<string> strings, int n)
     return strings;
 }
 ```
+시간복잡도 : 
