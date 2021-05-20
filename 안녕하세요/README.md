@@ -1,3 +1,36 @@
+문자열 내맘대로 정렬하기
+
+```c#
+using System;
+
+public class Solution {
+    public string[] solution(string[] strings, int n) {
+        string[] answer = new string[strings.Length];
+        Array.Copy(strings, answer, strings.Length);
+        Array.Sort(answer, (string a, string b) => {
+                if (a[n] == b[n])
+                {
+                    return a.CompareTo(b);
+                }
+                return a[n] < b[n] ? -1 : 1; 
+        });
+        return answer;
+    }
+}
+```
+
+시간복잡도
+
+- **O(nlogn)**
+
+관련내용
+
+- https://printfhello.tistory.com/57 (비번 스터디)
+
+<hr />
+
+기능개발
+
 ```c#
 public int[] solution(int[] progresses, int[] speeds) {
     const int FINISH_PROGRESS = 100;
