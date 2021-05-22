@@ -71,4 +71,4 @@ public int[] solution(int[] progresses, int[] speeds) {
 
 시간복잡도
 
-- **O(N + 100*N^2) -> O(N^2)**
+- **O(N + M*N^2) -> O(M*N^2)** ?
