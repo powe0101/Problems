@@ -3,8 +3,10 @@
 ```cs
 using System.Collections.Generic;
 
-public class Solution {
-    public int[] solution(int[] progresses, int[] speeds) {
+public class Solution
+{
+    public int[] solution(int[] progresses, int[] speeds)
+    {
         List<int> answer = new List<int>();
         int[] day = new int[progresses.Length];
         int count = 0;
@@ -43,6 +45,7 @@ public class Solution {
 문자열 내 마음대로 정렬하기
 
 ```cs
+using System;
 using System.Linq;
 
 public class Solution
@@ -57,6 +60,10 @@ public class Solution
         }
         Array.Sort(answer);
         
+        for (var j = 0; j < strings.Length; j++)
+        {
+            answer[j] = answer[j].Substring(1);
+        }
 
         return answer;
     }
