@@ -67,3 +67,4 @@ vector<int> solution(vector<int> progresses, vector<int> speeds)
     return answer;
 }
 ```
+시간복잡도 O(N)
