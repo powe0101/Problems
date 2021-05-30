@@ -1,5 +1,7 @@
 시간복잡도 O(N)
 게임 맵 최단거리
+![image](https://user-images.githubusercontent.com/16189959/120099062-66344200-c174-11eb-876b-2b6128b5a95b.png)
+
 ```c++
 #include <bits/stdc++.h>
 using namespace std;
@@ -62,6 +64,9 @@ int solution(vector<vector<int> > maps)
 ```
 스킬트리 
 시간복잡도 O(N)
+![image](https://user-images.githubusercontent.com/16189959/120099068-6fbdaa00-c174-11eb-84b3-ed1f9b9b2465.png)
+
+
 
 ```c++
 #include <bits/stdc++.h>
