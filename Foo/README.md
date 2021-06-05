@@ -2,7 +2,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-pair<string, string> GetData(const string &str)
+pair<string, string> ParseData(const string &str)
 {
     pair<string,string> temp;
     string name = "";
@@ -36,20 +36,21 @@ pair<string, string> GetData(const string &str)
 vector<string> solution(vector<string> record) {
     vector<string> answer;
     
-    unordered_map<string,string> list;
-    vector<string> ids;
+    unordered_map<string,string> list; // id에 해당하는 닉네임 저장
+    vector<string> ids; //id 값의 순서를 저장하는 리스트
     for(int i = 0; i < record.size(); ++i)
     {
-        auto temp = GetData(record[i]);
+        auto temp = ParseData(record[i]);
+        //L과 EC의 아이디 출력 순서가 서로 다름
         switch(record[i][0])
         {
             case 'L':
-                ids.push_back(temp.second);
+                ids.push_back(temp.second); 
                 break;
             case 'E':
             case 'C':
-                ids.push_back(temp.first);
-                list[temp.first] = temp.second;
+                ids.push_back(temp.first); 
+                list[temp.first] = temp.second; //변경되는 경우 id에 맞게 닉네임을 새로 할당
                 break;
         }
     }
