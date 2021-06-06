@@ -36,7 +36,13 @@ class Solution {
     }
 }
 
+
+
 =====================================================================
+
+
+
+
 class Solution {
     public long solution(int n) {
         long arr []= new long[2001];
