@@ -1,95 +1,72 @@
-# 연습문제 - 멀리 뛰기
+# 깊이/너비 우선 탐색(DFS/BFS) - 네트워크
 
-https://programmers.co.kr/learn/courses/30/lessons/12914
+https://programmers.co.kr/learn/courses/30/lessons/43162
 
 
 ```Java
 class Solution {
-    public long solution(int n) {
-        if(n <= 2) return n;
+    int answer = 0;
+    boolean[] visit;
+    
+    public int solution(int n, int[][] computers) {
+        visit = new boolean[n];
         
-        // long long answer = 0;
-        long [] arr = new long[n];
-        arr[0] = 1;
-        arr[1] = 2;
-        
-        for(int i=2; i<n; i++) {
-            arr[i] = (arr[i-2] + arr[i-1]) % 1234567;
+        // n개의 노드 각각을 출발점으로 삼아서 dfs를 실행해본다.
+        for(int i=0; i<n; i++) {
+            if(visit[i] == false) { // 이미 방문한 노드면 패스!
+                dfs(n, computers, i);
+                answer++;
+            }
         }
-        
-        return arr[n-1];
-    }   
+
+        return answer;
+    }
+    
+    public void dfs(int n, int[][] computers, int idx) {
+        visit[idx] = true;  // 우선 현재 노드를 방문 처리한다.
+        for(int i=0; i<computers[idx].length; i++) {  // 현재 노드에서 연결된 노드가 있나 확인해본다.
+            if(i != idx && computers[idx][i] == 1 && visit[i] == false) { // 현재 방문한 노드가 아니고, 다른 노드와 연결되어 있고, 방문하지 않았다면 그 노드로 dfs 실행
+                dfs(n, computers, i);
+            }
+        }
+    }
 }
 
 ```
 
-시간복잡도 : O(n)  
-피보나치 수열을 계산하는 문제와 동일함.  
-멀리뛰기를 할 수 있는 방법의 개수가 피보나치 수열처럼 증가
+시간복잡도 : O(n^2)
+n개의 노드에 대해 n번의 반복을 진행하므로 시간 복잡도는 n^2이라고 생각한다.
 
 
 <br />
 
-# 2019 KAKAO BLIND RECRUITMENT - 오픈채팅방
+# LeetCode - Sum of Unique Elements
 
-
-https://programmers.co.kr/learn/courses/30/lessons/42888
+https://leetcode.com/problems/sum-of-unique-elements/
 
 
 ```Java
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.HashMap;
-import java.util.Set;
 import java.util.ArrayList;
 
+
 class Solution {
-    public String[] solution(String[] record) {
-        String[][] strArr = new String[record.length][3];
+    public int sumOfUnique(int[] nums) {
+        int[] list = new int[101];  // 미리 배열을 101개 생성해준다. 숫자 계산 편하게 101개 생성
+        int sum = 0;
         
-        // 메시지를 명령어, uid, 닉네임으로 나눈다.
-        for(int i=0; i<record.length; i++) {
-            strArr[i] = record[i].split(" ");
+        for(int i=0; i<nums.length; i++) {  // 숫자를 index로 삼아서, 해당 숫자의 배열값을 +1 증가
+            list[nums[i]]++;
         }
         
-        // uid와 닉네임을 저장할 맵을 만든다.
-        // 맵은 같은 키값으로 값을 여러 번 저장하면, 가장 마지막으로 저장한 값만 남는다.
-        HashMap<String, String> map = new HashMap<>();
-        
-        // 맵의 특성을 이용해 [uid : 닉네임] 저장을 모든 메시지에 대해서 실행한다.
-        // 아래 for문을 실행하고 나면 map에 uid에 대한 마지막 닉네임이 저장됨.
-        // 단 Leave는 뺀다. 닉네임 변화와 무관함.
-        for(int i=0; i<strArr.length; i++) {
-            if(!strArr[i][0].equals("Leave")) {
-                map.put(strArr[i][1], strArr[i][2]);
-            }
+        for(int i=1; i<list.length; i++) {  // 배열 원소의 값이 1인 경우만 카운트!
+            if(list[i] == 1)
+                sum += i;
         }
         
-        // 결과의 크기를 모르므로 배열 크기 조절이 자유로운 ArrayList를 활용
-        ArrayList<String> list = new ArrayList<String>();
-        
-        // 입력받은 메시지 중 Enter, Leave만 골라서 해당 uid에 맞는 마지막 닉네임으로 변경해준다.
-        for(int i=0; i<strArr.length; i++) {
-            if(strArr[i][0].equals("Enter")) {
-                list.add(map.get(strArr[i][1]) + "님이 들어왔습니다.");
-            } else if(strArr[i][0].equals("Leave")) {
-                list.add(map.get(strArr[i][1]) + "님이 나갔습니다.");
-            }
-        }
-        
-        // 잘 나오는지 확인용
-        // for(int i=0; i<list.size(); i++) {
-        //     System.out.println(list.get(i));
-        // }
-        
-        // 메소드 반환형에 맞춰 ArrayList를 배열로 변경한다.
-        String[] answer = list.toArray(new String[0]);
-        
-        return answer;
+        return sum;
     }
 }
 ```
 
 시간복잡도 : O(n)  
-자바의 map이 같은 키값에 대해서는 마지막에 put한 값만 저장하기 때문에 그 특성을 이용하여 풀었음
-
+해시맵을 이용해서 중복되는 숫자를 걸러내려고 했는데, 이 소스보다 시간이 더 많이 소요되는 문제가 있었음.
