@@ -1,72 +1,99 @@
-# 깊이/너비 우선 탐색(DFS/BFS) - 네트워크
+# LeetCode - 11. Container With Most Water
 
-https://programmers.co.kr/learn/courses/30/lessons/43162
-
+https://leetcode.com/problems/container-with-most-water/submissions/  
+  
+가장 많은 물을 담을 수 있는 수직선을 골라 그 값을 구하는 문제
 
 ```Java
 class Solution {
-    int answer = 0;
-    boolean[] visit;
-    
-    public int solution(int n, int[][] computers) {
-        visit = new boolean[n];
-        
-        // n개의 노드 각각을 출발점으로 삼아서 dfs를 실행해본다.
-        for(int i=0; i<n; i++) {
-            if(visit[i] == false) { // 이미 방문한 노드면 패스!
-                dfs(n, computers, i);
-                answer++;
-            }
-        }
+    public int maxArea(int[] height) {
 
-        return answer;
-    }
-    
-    public void dfs(int n, int[][] computers, int idx) {
-        visit[idx] = true;  // 우선 현재 노드를 방문 처리한다.
-        for(int i=0; i<computers[idx].length; i++) {  // 현재 노드에서 연결된 노드가 있나 확인해본다.
-            if(i != idx && computers[idx][i] == 1 && visit[i] == false) { // 현재 방문한 노드가 아니고, 다른 노드와 연결되어 있고, 방문하지 않았다면 그 노드로 dfs 실행
-                dfs(n, computers, i);
+/* 
+이중 for문을 이용해 완전탐색으로 푸는 방법
+간단하지만 시간복잡도가 O(n^2)이라 시간초과남.
+*/
+
+//         int len = height.length;
+//         int max = 0;
+        
+//         for(int i=0; i<len-1; i++) {
+//             for(int j=i+1; j<len; j++) {
+//                 if(height[i] > height[j]) {
+//                     if((j-i) * height[j] > max)
+//                         max = (j-i) * height[j];
+//                 } else {
+//                     if((j-i) * height[i] > max)
+//                         max = (j-i) * height[i];
+//                 }
+//             }
+//         }
+        
+//         return max;
+
+/* 
+문제에 있는 Discuss 게시판의 이중 포인터를 이용하라는 조언을 이용한 코드
+현재 l, r에서 max값을 계산하고, 좌우측 수직선 중 낮은 선의 위치를 하나씩 안쪽으로 옮겨가면서 최댓값을 계산한다.
+*/
+        int l=0, r=height.length-1;
+        int max = 0;
+        
+        while(l < r) {
+            int lowHeight = height[l] > height[r] ? height[r] : height[l];
+            
+            max = max > ( lowHeight * (r-l) ) ? max : ( lowHeight * (r-l) );
+            
+            if(height[l] > height[r]) {
+                r--;
+            } else {
+                l++;
             }
         }
+        
+        return max;
     }
 }
 
 ```
 
-시간복잡도 : O(n^2)
-n개의 노드에 대해 n번의 반복을 진행하므로 시간 복잡도는 n^2이라고 생각한다.
-
-
+시간복잡도 : O(n)
+가장 많은 물을 담을 수 있는 경우가 주어진 수직선들 중 한 가운데에 있는 수직선에서 나온다면 O(n)이다.  
 <br />
 
-# LeetCode - Sum of Unique Elements
+# LeetCode - 921. Minimum Add to Make Parentheses Valid
 
-https://leetcode.com/problems/sum-of-unique-elements/
-
+https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/  
+  
+주어진 문자열의 괄호를 올바르게 닫을 수 있도록(= 괄호가 모두 짝이 맞도록) 만드려면 추가로 몇 개의 괄호가 필요한가?
+괄호의 종류 '(', ')' 및 위치는 상관하지 않는다.
 
 ```Java
-import java.util.ArrayList;
-
-
 class Solution {
-    public int sumOfUnique(int[] nums) {
-        int[] list = new int[101];  // 미리 배열을 101개 생성해준다. 숫자 계산 편하게 101개 생성
-        int sum = 0;
+    public int minAddToMakeValid(String s) {
         
-        for(int i=0; i<nums.length; i++) {  // 숫자를 index로 삼아서, 해당 숫자의 배열값을 +1 증가
-            list[nums[i]]++;
+        int len = s.length();
+        int l=0, r=0;
+        char prev = ' ';
+        
+        for(int i=0; i<len; i++) {
+            if(s.charAt(i) == ')') {
+                r++;
+                if(prev == '(') {
+                    l--;
+                    r--;
+                    if(l == 0)
+                        prev = ' ';
+                }
+            }
+            else {
+                l++;
+                prev = '(';
+            }
         }
         
-        for(int i=1; i<list.length; i++) {  // 배열 원소의 값이 1인 경우만 카운트!
-            if(list[i] == 1)
-                sum += i;
-        }
-        
-        return sum;
+        return l + r;
     }
 }
 ```
 
-시간복잡도 : O(n)  
-해시맵을 이용해서 중복되는 숫자를 걸러내려고 했는데, 이 소스보다 시간이 더 많이 소요되는 문제가 있었음.
+시간복잡도 : O(n)
+주어진 문자열의 괄호 개수를 모두 파악해야 하므로 O(n)
