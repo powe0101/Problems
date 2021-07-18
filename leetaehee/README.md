@@ -1,99 +1,138 @@
-# LeetCode - 11. Container With Most Water
+# LeetCode - 1382. Balance a Binary Search Tree
 
-https://leetcode.com/problems/container-with-most-water/submissions/  
+https://leetcode.com/problems/balance-a-binary-search-tree/
   
-가장 많은 물을 담을 수 있는 수직선을 골라 그 값을 구하는 문제
+이진트리를 밸런스이진트리로 만드는 문제
 
 ```Java
-class Solution {
-    public int maxArea(int[] height) {
+import java.util.*;
 
-/* 
-이중 for문을 이용해 완전탐색으로 푸는 방법
-간단하지만 시간복잡도가 O(n^2)이라 시간초과남.
-*/
-
-//         int len = height.length;
-//         int max = 0;
-        
-//         for(int i=0; i<len-1; i++) {
-//             for(int j=i+1; j<len; j++) {
-//                 if(height[i] > height[j]) {
-//                     if((j-i) * height[j] > max)
-//                         max = (j-i) * height[j];
-//                 } else {
-//                     if((j-i) * height[i] > max)
-//                         max = (j-i) * height[i];
-//                 }
-//             }
-//         }
-        
-//         return max;
-
-/* 
-문제에 있는 Discuss 게시판의 이중 포인터를 이용하라는 조언을 이용한 코드
-현재 l, r에서 max값을 계산하고, 좌우측 수직선 중 낮은 선의 위치를 하나씩 안쪽으로 옮겨가면서 최댓값을 계산한다.
-*/
-        int l=0, r=height.length-1;
-        int max = 0;
-        
-        while(l < r) {
-            int lowHeight = height[l] > height[r] ? height[r] : height[l];
-            
-            max = max > ( lowHeight * (r-l) ) ? max : ( lowHeight * (r-l) );
-            
-            if(height[l] > height[r]) {
-                r--;
-            } else {
-                l++;
-            }
-        }
-        
-        return max;
+public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
     }
 }
 
-```
-
-시간복잡도 : O(n)
-가장 많은 물을 담을 수 있는 경우가 주어진 수직선들 중 한 가운데에 있는 수직선에서 나온다면 O(n)이다.  
-<br />
-
-# LeetCode - 921. Minimum Add to Make Parentheses Valid
-
-https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/  
-  
-주어진 문자열의 괄호를 올바르게 닫을 수 있도록(= 괄호가 모두 짝이 맞도록) 만드려면 추가로 몇 개의 괄호가 필요한가?
-괄호의 종류 '(', ')' 및 위치는 상관하지 않는다.
-
-```Java
 class Solution {
-    public int minAddToMakeValid(String s) {
-        
-        int len = s.length();
-        int l=0, r=0;
-        char prev = ' ';
-        
-        for(int i=0; i<len; i++) {
-            if(s.charAt(i) == ')') {
-                r++;
-                if(prev == '(') {
-                    l--;
-                    r--;
-                    if(l == 0)
-                        prev = ' ';
-                }
+    TreeNode root; 
+
+    ArrayList<Integer> arr = new ArrayList<Integer>();
+    ArrayList<String> result = new ArrayList<String>();
+    
+    public TreeNode balanceBST(TreeNode param) {
+        inOrder(param, 1);
+        makeTree();
+        inOrder(root, 2);
+    
+        return root;
+    }
+    public void inOrder(TreeNode node, int mode) {
+        if(node != null) {
+            if(mode == 2)
+                result.add(Integer.toString(node.val));
+            
+            //왼쪽 노드 방문
+            if(node.left != null) {
+                if(mode == 2)
+                    result.add(Integer.toString(node.val));
+                inOrder(node.left, mode);
             }
             else {
-                l++;
-                prev = '(';
+                if(mode == 2)
+                    result.add("null");
+            }
+            
+            //값을 배열에 넣는다.
+            if(mode == 1)
+                arr.add(node.val);
+           esult.add();
+            
+            
+            //오른쪽 노드 방문
+            if(node.right != null) {
+                if(mode == 2)
+                    result.add(Integer.toString(node.val));
+                inOrder(node.right, mode);
+            }
+            else {
+                if(mode == 2)
+                    result.add("null");
             }
         }
         
-        return l + r;
+    }
+    
+    public void makeTree() {
+        root = makeSubTree(0, arr.size()-1);
+    }
+    
+    public TreeNode makeSubTree(int start, int end) {
+        if(start > end) return null;
+        int mid = (start + end) / 2;
+        TreeNode node = new TreeNode(arr.get(mid));
+        node.left = makeSubTree(start, mid-1);
+        node.right = makeSubTree(mid+1, end);
+        
+        return node;
+    }
+}
+
+```
+
+시간복잡도 : O(n^2)
+ArrayList의 Add 메소드의 시간복잡도는 O(n)이고, n개의 노드가 있다고 가정할 때 O(n^2)이 될 것 같다.
+<br />
+
+# 프로그래머스 - 탐욕법 - 조이스틱
+
+https://programmers.co.kr/learn/courses/30/lessons/42860
+  
+조이스틱으로 알파벳 이름을 완성하기.
+A로 구성된 문자열에서 최소한의 움직임으로 주어진 문자열을 만들어야 함.
+
+```Java
+class Solution {
+    public int solution(String name) {
+        int answer = 0;
+        // int before = 0, after = 0;
+        int len = name.length();
+        int min = len - 1;
+        int aCnt = 0;
+        
+        for(int i=0; i<len; i++) {
+            // A가 아닌 문자를 바꿀 때 발생하는 조작 횟수 계산
+            char c = name.charAt(i);
+            
+            int diff = 0;
+            if(c-'A' < 'Z'-c)
+                diff = c-'A';
+            else
+                diff = 'Z'-c+1;
+            
+            answer += diff;
+            
+            for(int j=i+1; j<len; j++) {
+                c = name.charAt(j);
+                if(c != 'A') {
+                    break;
+                }
+                else {
+                    int temp = (i*2) + len - (j+1);
+                    min = min < temp ? min : temp;
+                }
+            }
+        }      
+        return answer+min;
     }
 }
 ```
 
-시간복잡도 : O(n)
-주어진 문자열의 괄호 개수를 모두 파악해야 하므로 O(n)
+시간복잡도 : O(n^2)
+이중 for문이 맨 처음 실행될 때 n * (n-1)번 실행되므로 O(n^2)
