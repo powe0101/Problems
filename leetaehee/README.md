@@ -1,49 +1,88 @@
-# LeetCode - 572. Subtree of Another Tree
+# LeetCode - 62. Unique Paths
 
-https://leetcode.com/problems/subtree-of-another-tree/
+https://leetcode.com/problems/unique-paths/
   
-주어진 이진트리에 찾고자하는 서브트리가 존재하는지 확인하는 문제.
+오른쪽, 아래쪽으로만 이동할 수 있는 2차원 맵에서 유일한 경로의 개수를 찾는 문제
 
 ```Java
 class Solution {
-    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
-        // 문제에서 제시한 root가 null이면 비교할게 없으므로 false
-        if(root == null)
-            return false;
-
-        /* root가 null이 아니면 일단 서브트리가 있는지 확인해본다.
-        check 함수가 true를 반환하면 return true 실행
-        */
-        else if(check(root, subRoot))
-            return true;
-
-        /* check 함수가 false를 반환하면 아래 else문 실행
-        else문이 실행된다는건 root의 시작점에서 봤을 때 subRoot와 동일한 트리가 없다는 뜻
-        */
-        else
-            return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
-    }
+    int result = 0;
+    int width, height;
     
-    public boolean check(TreeNode r, TreeNode s) {
-        /* 둘 다 null이 아니면 false
-        한쪽만 null이면 비교할 수 없으니 false
-        둘 다 null이면 둘이 똑같은거니까 true
-        */
-        if(r == null || s == null)
-            return r == null && s == null;
-        /* 노드의 값이 같으면 양쪽 자식 값을 확인해봐야 함 */
-        else if(r.val == s.val)
-            return check(r.left, s.left) && check(r.right, s.right);
-        /* 노드의 값이 다르면 비교할 필요 없으니까 false */
-        else
-            return false;
+    public int uniquePaths(int m, int n) {
+        width = n;
+        height = m;
+        
+        explore(0, 0);
+        
+        return result;
+    }
+    public void explore(int x, int y) {
+        if(height-1 > x) { //세로
+            explore(x+1, y);
+        }
+        if(width-1 > y) { //가로
+            explore(x, y+1);
+        }
+        
+        if(x == height-1 && y == width-1) {
+            result++;
+            return;
+        }
     }
 }
 
 ```
 
-시간복잡도 : O(n)
-최악의 경우가 모든 노드가 값이 동일하고, 비교 대상인 subTree의 노드가 1개인 케이스라고 생각했다.
-이럴 경우 모든 노드를 다 탐색한 다음 마지막 가장 맨 아래 높이의 노드에서 subTree랑 동일한 노드를 찾을 수 있다.
-다른 최악 케이스를 더 생각해봐야 할 것 같다
+시간복잡도 : O(???)
+m * n 크기의 맵이 주어졌을 때, m * n = N이라고 하면 경로를 찾는 매 탐색마다 2개의 분기로 나뉜다.
+그러면 모든 경로를 탐색하는 시간은 2^N이 될 것 같은데.. 어떻게 시간복잡도를 계산할지 헷갈린다.
+재귀 호출의 시간복잡도를 구하는게 조금 어려운 관계로 이번건은 추후 수정해야 할 것 같다.
+
+<br />
+
+
+# LeetCode - 3. Longest Substring Without Repeating Characters
+
+https://leetcode.com/problems/longest-substring-without-repeating-characters/
+  
+주어진 문자열에서 중복된 문자가 없는 가장 긴 문자열의 찾는 문제
+
+```Java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+		int max = 0;
+		int len = s.length();
+		
+		if(len == 0) return 0;
+		
+		for(int i=0; i<len; i++) {
+			//비교할 문자열
+			for(int j=i+1; j<len; j++) {
+				//비교할 문자
+				String temp = s.substring(i, j);
+				String c = s.substring(j, j+1);
+				int tempLen = temp.length();
+				
+				if(temp.contains(c)) {
+					break;
+				}
+				else {
+					max = max > tempLen ? max : tempLen;
+				}
+			}
+		}
+
+		return max+1;
+    }
+}
+
+```
+
+시간복잡도 : O(N^2)
+java에서 substring 메소드는 O(N)의 시간 복잡도를 가진다.
+그리고 소스코드에는 2중 for문을 사용했다. 밖의 for문은 n만큼 돌고, 안의 for문은 도는 횟수가 매번 1씩 줄어든다.
+그렇다면 최악의 경우, 즉 찾고자 하는 문자열이 가장 뒤에 있는 케이스에서는 처음엔 n-1번 for문이 돌고 마지막에는 1번 돌게된다.
+그럼 실제로 도는 (N^2) / 2이 될 것 같은데, 시간복잡도에서 차수만 고려하므로 O(N^2)이 될 것 같다. 
+
 <br />
