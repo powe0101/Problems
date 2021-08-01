@@ -31,7 +31,7 @@ public:
  https://leetcode.com/problems/unique-paths/ 
 
 ```c++
-class Solution { // 시간복잡도 O(N+M), 공간복잡도 O(N+M)
+class Solution { // 시간복잡도 O(NM), 공간복잡도 O(N+M)
 public:
     int uniquePaths(int m, int n) {
         int dp[101][101] = { 0 };
