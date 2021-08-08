@@ -43,3 +43,77 @@ int solution(int N, int number) {
     return answer;
 }
 ```
+
+거리두기 확인하기 (미완성)
+```c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+vector<int> solution(vector<vector<string>> places) {
+    vector<int> answer;
+
+    for(int i = 0; i < places.size(); ++i)
+    {
+        const auto room = places[i]; //vector<string>
+        
+        for(int j = 0; j < room.size(); ++j)
+        {
+            bool isFlag = false;
+            for(int k = 0; k < room[j].size(); ++k)
+            {
+                int x = k;
+                int y = j;
+                vector<char> list;
+                if(room[x][y] == 'P')
+                {
+                    if(x > 0)
+                    list.push_back(room[x-1][y]);
+                    if(x < 4)
+                    list.push_back(room[x+1][y]);
+                    if(x < 3 && room[x+1][y] != 'X')
+                    list.push_back(room[x+2][y]);
+                    if(x > 1 && room[x-1][y] != 'X')
+                    list.push_back(room[x-2][y]);
+                    
+                    if(y > 0)
+                    list.push_back(room[x][y-1]);
+                    if(y < 4)
+                    list.push_back(room[x][y+1]);
+                    if(y < 3 && room[x][y+1] != 'X')
+                    list.push_back(room[x][y+2]);
+                    if(y > 1 && room[x][y-1] != 'X')
+                    list.push_back(room[x][y-2]);
+                    
+                    if(x > 0 && y > 0 && room[x][y-1] != 'X' && room[x-1][y] != 'X')
+                        list.push_back(room[x-1][y-1]);
+                    if(x > 0 && y < 4 && room[x][y+1] != 'X' && room[x-1][y] != 'X')
+                        list.push_back(room[x-1][y+1]);
+                    if(x < 4 && y < 4 && room[x+1][y] != 'X' && room[x][y+1] != 'X')
+                        list.push_back(room[x+1][y+1]);
+                    if(x < 4 && y > 0 && room[x+1][y] != 'X' && room[x][y-1] != 'X')
+                        list.push_back(room[x+1][y-1]);
+                    
+                    if(find(list.begin(),list.end(),'P') != list.end())
+                    {
+                        isFlag = true;
+                        break;
+                    }
+                }
+            }
+            if(isFlag == true)
+            {
+                answer.push_back(0);
+                break;
+            }
+            else{
+                answer.push_back(1);
+                break;
+            }
+        }
+    }
+    
+    return answer;
+}
+```
