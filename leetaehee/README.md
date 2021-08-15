@@ -1,88 +1,120 @@
-# LeetCode - 62. Unique Paths
+# LeetCode - 70. Climbing Stairs
 
-https://leetcode.com/problems/unique-paths/
+https://leetcode.com/problems/climbing-stairs/
   
-오른쪽, 아래쪽으로만 이동할 수 있는 2차원 맵에서 유일한 경로의 개수를 찾는 문제
+N개의 계단을 1, 2개씩 오를 경우 N번째 계단에 도착하는 서로 다른 방법의 개수찾기
 
 ```Java
 class Solution {
-    int result = 0;
-    int width, height;
-    
-    public int uniquePaths(int m, int n) {
-        width = n;
-        height = m;
+    public int climbStairs(int n) {
+        int temp=0,a=1,b=2;
         
-        explore(0, 0);
+        if(n == 1)
+            return 1;
+        else if(n == 2)
+            return 2;
         
-        return result;
-    }
-    public void explore(int x, int y) {
-        if(height-1 > x) { //세로
-            explore(x+1, y);
-        }
-        if(width-1 > y) { //가로
-            explore(x, y+1);
+        for(int i=3; i<=n; i++) {
+            temp = b;
+            b = a+b;
+            a = temp;
         }
         
-        if(x == height-1 && y == width-1) {
-            result++;
-            return;
-        }
+        return b;
     }
 }
 
 ```
 
-시간복잡도 : O(???)
-m * n 크기의 맵이 주어졌을 때, m * n = N이라고 하면 경로를 찾는 매 탐색마다 2개의 분기로 나뉜다.
-그러면 모든 경로를 탐색하는 시간은 2^N이 될 것 같은데.. 어떻게 시간복잡도를 계산할지 헷갈린다.
-재귀 호출의 시간복잡도를 구하는게 조금 어려운 관계로 이번건은 추후 수정해야 할 것 같다.
+시간복잡도 : O(N)
+계단을 오르는 방법을 하나하나 찾다보면 N번째에 도착하는 서로 다른 방법의 개수가 피보나치 수열을 동일함을 발견할 수 있다.
+피보나치 수열은 현 위치의 값이 2번째 전의 값과 1번째 전의 값을 더하여 구한다.
+이 방법을 이용해 계산하면 시간복잡도는 O(N)이 나온다.
+
+Runtime: 0 ms, faster than 100.00% of Java online submissions for Climbing Stairs.
+Memory Usage: 36.1 MB, less than 15.86% of Java online submissions for Climbing Stairs.
 
 <br />
 
 
-# LeetCode - 3. Longest Substring Without Repeating Characters
+# 프로그래머스 - 완전탐색 - 모의고사
 
-https://leetcode.com/problems/longest-substring-without-repeating-characters/
+https://programmers.co.kr/learn/courses/30/lessons/42840
   
-주어진 문자열에서 중복된 문자가 없는 가장 긴 문자열의 찾는 문제
+1번 수포자가 찍는 방식: 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, ...
+2번 수포자가 찍는 방식: 2, 1, 2, 3, 2, 4, 2, 5, 2, 1, 2, 3, 2, 4, 2, 5, ...
+3번 수포자가 찍는 방식: 3, 3, 1, 1, 2, 2, 4, 4, 5, 5, 3, 3, 1, 1, 2, 2, 4, 4, 5, 5, ...
+
+1번 문제부터 마지막 문제까지의 정답이 순서대로 들은 배열 answers가 주어졌을 때, 가장 많은 문제를 맞힌 사람이 누구인지 반환하기.
+많이 맞힌 사람이 여러명이면 오름차순으로 정렬하기.
 
 ```Java
-class Solution {
-    public int lengthOfLongestSubstring(String s) {
-		int max = 0;
-		int len = s.length();
-		
-		if(len == 0) return 0;
-		
-		for(int i=0; i<len; i++) {
-			//비교할 문자열
-			for(int j=i+1; j<len; j++) {
-				//비교할 문자
-				String temp = s.substring(i, j);
-				String c = s.substring(j, j+1);
-				int tempLen = temp.length();
-				
-				if(temp.contains(c)) {
-					break;
-				}
-				else {
-					max = max > tempLen ? max : tempLen;
-				}
-			}
-		}
+import java.util.*;
 
-		return max+1;
+class Solution {
+    public int[] solution(int[] answers) {
+        // ArrayList<Integer> answer = new ArrayList<>();  //정답 많이 맞힌 순서대로 정렬
+        int[] answer = {};
+        int anscnt1=0, anscnt2=0, anscnt3=0;
+        int[] anscnt = new int[3];
+        int anslen = answers.length;
+        
+        int[] anspt1 = {1,2,3,4,5};
+        int[] anspt2 = {2,1,2,3,2,4,2,5};
+        int[] anspt3 = {3,3,1,1,2,2,4,4,5,5};
+        
+        int ansptn1 = anspt1.length;
+        int ansptn2 = anspt2.length;
+        int ansptn3 = anspt3.length;
+        // System.out.println(ansptn1 +", "+ ansptn2 +", "+ ansptn3);
+        
+        for(int i = 0; i < anslen; i++) {
+            if(answers[i] == anspt1[i%ansptn1])
+                anscnt[0] += 1;
+        }
+        for(int i = 0; i < anslen; i++) {
+            if(answers[i] == anspt2[i%ansptn2])
+                anscnt[1] += 1;
+        }
+        for(int i = 0; i < anslen; i++) {
+            if(answers[i] == anspt3[i%ansptn3])
+                anscnt[2] += 1;
+        }
+        // System.out.println(anscnt[0] +", "+ anscnt[1] +", "+ anscnt[2]);
+        
+        //가장 높은 점수 구하기
+        int max = 0;
+        for (int i = 0; i < 3; i++) {
+            if(anscnt[i] > max)
+                max = anscnt[i];
+        }
+        // System.out.println(max);
+        
+        //가장 높은 점수를 똑같이 받은 사람이 몇명인지 숫자 세기
+        int maxcnt = 0;
+        for (int i = 0; i < 3; i++) {
+            if(anscnt[i] == max)
+                maxcnt++;
+        }
+        //System.out.println("동점자 : " + maxcnt);
+        
+        answer = new int[maxcnt];
+        int j = 0;
+        for (int i = 0; i < 3; i++) {
+            if(anscnt[i] == max) {
+                //System.out.println("i : "+ i+", anscnt[i] : " + anscnt[i]);
+                answer[j++] = i+1;
+                //System.out.println("answer[j] : " + answer[j]);               
+            }
+        }
+        
+        return answer;
     }
 }
 
 ```
 
-시간복잡도 : O(N^2)
-java에서 substring 메소드는 O(N)의 시간 복잡도를 가진다.
-그리고 소스코드에는 2중 for문을 사용했다. 밖의 for문은 n만큼 돌고, 안의 for문은 도는 횟수가 매번 1씩 줄어든다.
-그렇다면 최악의 경우, 즉 찾고자 하는 문자열이 가장 뒤에 있는 케이스에서는 처음엔 n-1번 for문이 돌고 마지막에는 1번 돌게된다.
-그럼 실제로 도는 (N^2) / 2이 될 것 같은데, 시간복잡도에서 차수만 고려하므로 O(N^2)이 될 것 같다. 
+시간복잡도 : O(N)
+파라미터 answers의 길이만큼 3번 for문이 도는 부분이 있어 3N 이상이지만, 상수는 무시하므로 O(N)이다.
 
 <br />
