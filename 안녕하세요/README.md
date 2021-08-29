@@ -3,7 +3,7 @@
 O(N)
 
 ```c++
- class Solution {
+  class Solution {
  public:
      ListNode* removeNthFromEnd(ListNode* head, int n) {
          auto cur = head;
@@ -14,6 +14,7 @@ O(N)
          }
          
          int removeIdx = size - n;
+         ListNode* prev = nullptr;
          ListNode* answer = nullptr;
          cur = head;
          while (cur != nullptr) {
