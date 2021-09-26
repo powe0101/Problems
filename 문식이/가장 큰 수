@@ -1,0 +1,37 @@
+```cpp
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool StringCompare(string a, string b)
+{
+	return a + b > b + a;
+}
+
+string solution(vector<int> numbers) {
+	string answer = "";
+	vector<string> strings;
+
+	for (auto& num : numbers)
+	{
+		strings.push_back(to_string(num));
+	}
+
+	sort(strings.begin(), strings.end(), StringCompare);
+
+	if (strings[0] == "0")
+	{
+		return "0";
+	}
+	else
+	{
+		for (auto str : strings)
+		{
+			answer += str;
+		}
+	}
+	return answer;
+}
+```
