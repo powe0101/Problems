@@ -1,3 +1,4 @@
+```c++
 class Solution {
 public:
     static bool compare(const vector<int>& a, const vector<int>& b)
@@ -31,3 +32,4 @@ public:
         return list;
     }
 };
+```
