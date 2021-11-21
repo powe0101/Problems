@@ -44,3 +44,42 @@ int solution(vector<int> numbers, int target) {
     return answer;
 }
 ```
+
+```c++
+class Solution {
+public:
+    void ToZero(int x, int y, vector<vector<char>>& grid) {
+        if(x < 0 || x >= grid.size()) 
+            return;
+        if(y < 0 || y >= grid[x].size()) 
+            return;
+        if(grid[x][y] == '0') 
+            return;
+        
+        grid[x][y] = '0';
+        
+        ToZero(x+1, y, grid);
+        ToZero(x-1, y, grid);
+        ToZero(x, y-1, grid);
+        ToZero(x, y+1, grid);
+    }
+    
+    int numIslands(vector<vector<char>>& grid) {
+        int result = 0;
+        
+        for(int i = 0; i < grid.size(); ++i)
+        {
+            for(int j = 0; j < grid[i].size(); ++j)
+            {
+                if(grid[i][j] =='0')
+                    continue;
+                
+                result += 1;
+                ToZero(i, j, grid);
+            }
+        }
+        
+        return result;
+    }
+};
+```
