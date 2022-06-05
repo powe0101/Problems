@@ -41,22 +41,21 @@ public:
     {
         int result = 0;
         
-        queue<int> list;
-        queue<int> list2;
+        int left = 0, right = 1;
         
-        list.push(s[0]);
-        
-        while(s.size() > 0)
+        for(int i = 1; i < s.size(); ++i)
         {
-            int size = list.size();
-            
-            for(int i = 0; i < size; ++i)
+            if(s[i] != s[i-1])
             {
-                auto temp = list.front(); list.pop();
+                result += min(left,right);
+                left = right;
+                right = 1;
             }
+            else
+                right += 1;
         }
         
-        return result;
+        return result + min(left,right);
     }
 };
 ```
