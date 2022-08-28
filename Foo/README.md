@@ -53,6 +53,23 @@ public:
         return (-0.5 + sqrt(0.5 + 2*grades.size())); 
     }
 };
+class Solution {
+public:
+    int maximumGroups(vector<int>& grades) 
+    {
+        int total = 0;
+        int k = 0;
+        
+        const int n = grades.size();
+        
+        while(total <= n)
+        {
+            total += ++k;
+        }
+        
+        return k-1;
+    }
+};
 
 class Solution {
 public:
