@@ -42,4 +42,36 @@ public:
     }
 };
 ```
+https://leetcode.com/problems/maximum-number-of-groups-entering-a-competition/
+```c++
+class Solution {
+public:
+    int maximumGroups(vector<int>& grades) 
+    {
+        int result = 0;
+        
+        return (-0.5 + sqrt(0.5 + 2*grades.size())); 
+    }
+};
+
+class Solution {
+public:
+    int maximumGroups(vector<int>& grades) 
+    {
+        int result = 0;
+
+        long long size = grades.size();
+        long long count = 1;
+        while(size > 0)
+        {
+            size -= count;
+            count += 1;
+            if(size >= 0)
+                result += 1;
+        }
+        
+        return result;
+    }
+};
+```
 
